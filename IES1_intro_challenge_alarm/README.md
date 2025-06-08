@@ -1,7 +1,41 @@
 # ラズベリーパイで動作するイントロクイズ式目覚まし
 
 こちらは、大学の授業システム総合演習Iの授業で作成したラズベリーパイ上で動くイントロクイズ式目覚ましとなっております。
-##　背景
+
+添付しているのは、イントロクイズ式目覚ましをパソコンでも動かせるようにしたものです。
+
+##使い方
+必要なライブラリ: PyGame, SQLite3
+まず、music_database.pyで、曲のパスとタイトルを入力しイントロクイズに設定したい曲を決めます(3曲以上登録しないと、動きませんのでご注意ください。)
+```
+C:XXXXX> python music_database.py   
+
+--- Music DB Manager ---
+1. Insert music
+2. Get music
+3. Delete music
+4. Exit
+Enter your choice: 1
+Please enter the path of the music file: music/instruction.wav
+Please enter the title of the music: Inst
+Music inserted successfully!
+```
+続いて、alarm.pyで、起きたい時刻を設定します.
+```
+C: XXXXXX> python alarm.py
+pygame 2.5.2 (SDL 2.28.3, Python 3.12.3)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+設定する時間と分を空白区切り 24時間換算で入力してください。 例: 22 30 21 30
+おやすみなさい
+```
+
+こちらで指定時刻になったら、アラームが鳴る響くようになります。アラームの画面でキーを押下すると、イントロクイズが始まります。
+![image](https://github.com/user-attachments/assets/12b983e5-9518-4589-b09e-dc1966d591af)
+
+ユーザーがクイズを強制終了しようとしたり、GameOverになったりすると、再度アラームが鳴ります
+![image](https://github.com/user-attachments/assets/738ae7f8-001d-44d4-948a-801800c2cb49)
+
+## 背景
 従来の目覚まし時計では、アラームを止めた後に再度寝てしまう可能性があります。また、大音量の目覚ましや振動式のものもありますが、アパートなどで使用する際、近所迷惑になることや、目覚ましが鳴ったとしても再度寝てしまう恐れがあるという課題が存在します。
 そこで、二度寝を防ぎつつ辛い朝の目覚めを楽しくしたいと思い、目覚ましに自分の好きな曲のイントロクイズを導入できれば楽しくなるのではないかと思い、作成に至ったのが背景です
 ## 機能
@@ -63,5 +97,12 @@ LED: 20番ピン, 18番ピンに接続
 クイズを止めるためのボタン: 1番ピン, 22番ピンに接続
 
 I2C LCD(液晶)モジュール: GND:6番ピン, VDD:2番ピン, SDA:3番ピン, SCL:5番ピン
+
+## デモ動画
+https://www.youtube.com/watch?v=5f6MvzREQP0&feature=youtu.be
+
+## 学んだこと
+
+この目覚ましを作る作業を通じて、ユーザーに喜ばれる目覚まし機能を作成するために、どのようにインタラクションを工夫し、ユーザー体験を向上させるかについて多くを学びました。
 
 
