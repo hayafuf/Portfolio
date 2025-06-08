@@ -52,4 +52,5 @@ https://www.youtube.com/watch?v=luPCrabzTN8
 フレームワーク(Framework): CreateJS
 
 2024年度作品(読み込みに時間がかかります):https://hayafuf.github.io/CSSC2024_our_contribute/
+
 2023年度作品(読み込まれたときに画面クリックでゲームが始まります): https://hayafuf.github.io/CSSC2023_our_contribute/
