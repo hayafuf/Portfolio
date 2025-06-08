@@ -41,6 +41,9 @@ https://www.youtube.com/watch?v=hD9rhce0qRo
 ×不正解, アルスパーク様,　【無料】 効果音のフリー音源素材, https://arspark.jp/material/
 
 Time up音源, 魔王魂様, システム08, https://maou.audio/
+
+アラーム音, エスフェクツ：無料効果音素材配信様, エヴァンゲリオン風警告音, https://esffects.net/kiyaku.html
+
 ## デモ動画
 https://www.youtube.com/watch?v=luPCrabzTN8
 
