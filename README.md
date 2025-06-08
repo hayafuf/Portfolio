@@ -52,7 +52,7 @@ https://www.youtube.com/watch?v=luPCrabzTN8
 
 ```
 フォルダー(Folder)
-CSSC2024,
+CSSC2024
 CSSC2023
 ```
 ## 技術
