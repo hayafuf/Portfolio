@@ -18,7 +18,9 @@
 
 
 ## デモ動画
-https://www.youtube.com/watch?v=hD9rhce0qRo
+
+https://github.com/user-attachments/assets/d50bd8a1-6090-4ec6-b733-2d74e22c60cd
+
 
 ##  2.ラズベリーパイ イントロチャレンジアラーム / Raspberry pi Intro-challenge alarm 
 ```
@@ -45,7 +47,10 @@ Time up音源, 魔王魂様, システム08, https://maou.audio/
 アラーム音, エスフェクツ：無料効果音素材配信様, エヴァンゲリオン風警告音, https://esffects.net/kiyaku.html
 
 ## デモ動画
-https://www.youtube.com/watch?v=luPCrabzTN8
+
+https://youtu.be/5f6MvzREQP0
+
+
 
 ## 3.JavaScriptゲーム制作(インストラクター担当) / JavaScript Game Development Instructor
 高校生向けの「コンピュータサイエンス・サマーキャンプ」において、JavaScriptを使用したゲームプログラミングコースのインストラクターとして参加し、参加者にプログラミングの基礎をサポートしながら、ものづくりの楽しさを伝えました。このキャンプでは、3泊4日という短期間で、参加者のコンピュータスキルに差がある中での指導が求められました。この経験を通じて、限られた時間の中で最良の解決策を見つける発想力・遊び心、相手のスキルに対してアドバイスを伝える力そして、グループをゴールに導くプロジェクト推進力を養いました。/ I participated as an instructor in the "Computer Science Summer Camp" JavaScript game programming course. I taught the basics of programming to the participants and demonstrated how manufacturing can be fun. The game development course lasted only three nights and four days, so I had to adapt my instruction to participants with varying computer skills. From this experience, I gained optimal solutions for fostering creativity, playfulness, providing teaching advice on partners' skills, and promoting projects. 
