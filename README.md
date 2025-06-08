@@ -15,13 +15,7 @@
 
 ハードウェア(Hardware): Raspberry Pi4 Model B, Camera Module
 
-イントロクイズのナレーション(Narration of Intro quiz): VOICEVOX:ずんだもん　https://icevox.hiroshiba.jp/
 
-音源使用素材(BGM & SE): 〇正解, アルスパーク様, 【無料】 効果音のフリー音源素材, https://arspark.jp/material/
-
-×不正解, アルスパーク様,　【無料】 効果音のフリー音源素材, https://arspark.jp/material/
-
-Time up音源, 魔王魂様, システム08, https://maou.audio/
 
 ## デモ動画
 https://www.youtube.com/watch?v=hD9rhce0qRo
@@ -38,6 +32,15 @@ https://www.youtube.com/watch?v=hD9rhce0qRo
 フレームワーク(Framework): PyGame
 
 使用した物品(Used elements): Raspberry Pi3 ModelB, Speaker,BreadBoard, Buzzer, Register, Jumper wire, LCD
+
+
+イントロクイズのナレーション(Narration of Intro quiz): VOICEVOX:ずんだもん　https://icevox.hiroshiba.jp/
+
+音源使用素材(BGM & SE): 〇正解, アルスパーク様, 【無料】 効果音のフリー音源素材, https://arspark.jp/material/
+
+×不正解, アルスパーク様,　【無料】 効果音のフリー音源素材, https://arspark.jp/material/
+
+Time up音源, 魔王魂様, システム08, https://maou.audio/
 ## デモ動画
 https://www.youtube.com/watch?v=luPCrabzTN8
 
