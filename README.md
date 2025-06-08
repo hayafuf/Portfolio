@@ -1,7 +1,7 @@
 # はじめに
 本ポートフォリオをご覧いただき、誠にありがとうございます。これまでに作成した主要な成果物をまとめています。さらに詳細な技術仕様に関しましては、各フォルダ内のREADNE.md, または、pdfファイルから見る事ができます。/Thank you very much for visiting my portfolio. This portfolio highlights the key project that I have developed. For more detailed technical specification please refer to the READ files or documentation files within each foloder.
 
-## エッジAI搭載　自動走行ラズベリーパイカー / Raspberry Pi autonomous driving car 
+## 1.エッジAI搭載　自動走行ラズベリーパイカー / Raspberry Pi autonomous driving car 
 ```
 フォルダ(Foloder): autonomous_driving
 ```
@@ -20,7 +20,7 @@
 ## デモ動画
 https://www.youtube.com/watch?v=hD9rhce0qRo
 
-##  ラズベリーパイ イントロチャレンジアラーム / Raspberry pi Intro-challenge alarm 
+##  2.ラズベリーパイ イントロチャレンジアラーム / Raspberry pi Intro-challenge alarm 
 ```
 フォルダ(Folder): IES1_intro_challenge_alarm
 ```
@@ -44,7 +44,7 @@ Time up音源, 魔王魂様, システム08, https://maou.audio/
 ## デモ動画
 https://www.youtube.com/watch?v=luPCrabzTN8
 
-## JavaScriptゲーム制作(インストラクター担当) / JavaScript Game Development Instructor
+## 3.JavaScriptゲーム制作(インストラクター担当) / JavaScript Game Development Instructor
 高校生向けの「コンピュータサイエンス・サマーキャンプ」において、JavaScriptを使用したゲームプログラミングコースのインストラクターとして参加し、参加者にプログラミングの基礎をサポートしながら、ものづくりの楽しさを伝えました。このキャンプでは、3泊4日という短期間で、参加者のコンピュータスキルに差がある中での指導が求められました。この経験を通じて、限られた時間の中で最良の解決策を見つける発想力・遊び心、相手のスキルに対してアドバイスを伝える力そして、グループをゴールに導くプロジェクト推進力を養いました。/ I participated as an instructor in the "Computer Science Summer Camp" JavaScript game programming course. I taught the basics of programming to the participants and demonstrated how manufacturing can be fun. The game development course lasted only three nights and four days, so I had to adapt my instruction to participants with varying computer skills. From this experience, I gained optimal solutions for fostering creativity, playfulness, providing teaching advice on partners' skills, and promoting projects. 
 ## 技術
 使用言語(Programming Language)JavaScript, HTML
