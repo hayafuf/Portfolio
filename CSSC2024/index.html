@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>シューティングゲーム</title>
+    <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+    <script>
+        //createJSの読み込みが終わってから、init関数をよぶ。	
+    let counter = 0;
+        window.addEventListener("load", init);
+        let startTime;
+
+        let overTime;
+        function init() {
+
+            //BGM群
+            if (counter === 0) {
+                createjs.Sound.registerSound("audio/TitleBGM.mp3", "TitleBGM");
+                createjs.Sound.setDefaultPlayProps("TitleBGM", new createjs.PlayPropsConfig().set({ loop: -1 }));
+
+                createjs.Sound.registerSound("audio/GameBGM.mp3", "BattleBGM");
+                createjs.Sound.setDefaultPlayProps("BattleBGM", new createjs.PlayPropsConfig().set({ loop: -1 }));
+
+                //エフェクト群
+                createjs.Sound.registerSound("audio/shoot.mp3", "shot");
+                createjs.Sound.registerSound("audio/GameOver.mp3", "gameover");
+                createjs.Sound.setDefaultPlayProps("gameover", new createjs.PlayPropsConfig().set({ loop: -1 }));
+                createjs.Sound.registerSound("audio/damage_enemy.mp3", "damege");
+                createjs.Sound.registerSound("audio/damaged.mp3", "damaged");
+                counter = 1;
+            }
+            //敵のキャラを追加する為の定数
+            const ENEMY_ID1 = 0;
+            const ENEMY_ID2 = 1;
+            const ENEMY_ID3 = 2;
+
+            const LEFTUP = 0;
+            const RIGHTUP = 1;
+            const LEFTDOWN = 2;
+            const RIGHTDOWN = 3;
+
+
+            let stage = new createjs.Stage("myCanvas");
+
+            if (counter === 1) {
+                createjs.Sound.on("fileload", function (event) {
+                    if (event.id === "TitleBGM") {
+                        // BGM再生
+                        createjs.Sound.play("TitleBGM");
+                    }
+                });
+            }
+            let player_flag = 0;
+            let count = 0;
+            let bg2;
+            let bg3;
+            let enemyList = [];
+            let enemyShape = [];
+            let player_shape;
+            let enemy_id_List = []; //敵のidを格納する為のリスト
+            let diagnal_enemy_List = []; //斜めの敵を格納するリスト
+            let diagnal_enemy_Shape = [];
+            let blue_enemy_spown_List = []; //斜めから出てくる敵に対するリスト
+            let bulletList = [];
+
+            let chase_enemy_List = [];
+
+            let scene = 0;
+            let score = 0;
+            let scoreText = new createjs.Text("Score: 0", "20px sans-serif", "white");
+            scoreText.x = 10;
+            scoreText.y = 10;
+            stage.addChild(scoreText);
+            window.addEventListener("keydown", handleKeyDown);
+            window.addEventListener("keyup", handleKeyUp);
+            //retryするボタン
+            let retry_button;
+            let random;
+
+            const SPACE = 32;
+            const A = 65;
+            const W = 87;
+            const D = 68;
+            const S = 83;
+
+            let isSpace = false;
+            let isA = false;
+            let isW = false;
+            let isD = false;
+            let isS = false;
+
+
+
+            function handleKeyDown(event) {
+                let keyCode = event.keyCode;
+
+                if (keyCode === SPACE) {
+                    isSpace = true;
+                }
+
+                else if (keyCode === D) {
+                    isD = true;
+                }
+                else if (keyCode === W) {
+                    isW = true;
+                }
+                else if (keyCode === A) {
+                    isA = true;
+                }
+                else if (keyCode === S) {
+                    isS = true;
+                }
+            }
+
+            function handleKeyUp(event) {
+                let keyCode = event.keyCode;
+
+                if (keyCode === SPACE) {
+                    isSpace = false;
+                }
+                else if (keyCode === D) {
+                    isD = false;
+                }
+                else if (keyCode === W) {
+                    isW = false;
+                }
+                else if (keyCode === A) {
+                    isA = false;
+                }
+                else if (keyCode === S) {
+                    isS = false;
+                }
+            }
+
+            //背景
+            let bg = new createjs.Shape();
+            bg.graphics.beginFill("black").drawRect(0, 0, 1980, 1080);
+            stage.addChild(bg);
+
+            //プレイヤー
+            let player;
+
+
+            let titleText = new createjs.Text("よ け ま す", "200px	sans-serif", "white");
+            titleText.x = 850;
+            titleText.y = stage.canvas.height / 2 - 400;
+            titleText.textAlign = "center";
+            stage.addChild(titleText);
+
+            let set = new createjs.Text("  W A S D 移動  SPACEキー 射撃  敵に当たらないように！！ クリアなしです。", "50px	sans-serif", "yellow");
+            set.x = 950;
+            set.y = stage.canvas.height / 2 + 200;
+            set.textAlign = "center";
+            stage.addChild(set);
+
+            stage.addEventListener("click", handleClick);
+
+            createjs.Ticker.setFPS(60);
+
+            createjs.Ticker.addEventListener("tick", handleTick);
+
+            function handleRetry() {
+                if (scene === 1 && !retry_button) {
+                    retry_button = new createjs.Container();
+                    retry_button.x = stage.canvas.width / 2 - 900;
+                    retry_button.y = stage.canvas.height / 2 + 300;
+                    stage.addChild(retry_button);
+
+
+                    /*let button_bg = new createjs.Shape();
+                    button_bg.graphics.setStrokeStyle(1) //ボタンの淵のスタイル
+                      .beginStroke("#563d7c") // ボタンの淵の色 
+                      .beginFill("white") // ボタンの中の色
+                      .drawRoundRect(0, 0, 240, 70, 4); //
+                    retry_button.addChild(button_bg);
+                    */
+                    let label = new createjs.Text("Retry", "24pt sans-serif", "white");
+                    label.x = 240 / 2;
+                    label.y = 70 / 2;
+                    label.textAlign = "center";
+                    label.textBaseline = "middle";
+                    retry_button.addChild(label);
+
+                    retry_button.addEventListener("click", retry);
+                }
+            }
+
+            function retry() {
+                createjs.Sound.stop();
+                stage.removeChild(retry_button);
+                retry_button = null;
+
+                createjs.Ticker.removeAllEventListeners();
+                stage.removeAllEventListeners();
+                init();
+            }
+            function handleClick() {
+                if (scene === 0) {
+                    createjs.Sound.stop();
+                    scene = 1;
+                    stage.removeChild(titleText);
+                    stage.removeChild(set);
+                    bg2 = new createjs.Bitmap('picture/back_ground2.png');
+                    bg2.crossOrigin = "Anonymous";
+                    bg2.scaleX = 1.3;
+                    bg2.scaleY = 1.3;
+                    stage.addChild(bg2);
+                    stage.removeChild(bg);
+
+                    startTime = new Date();
+
+                    createjs.Sound.play("BattleBGM");
+                }
+            }
+
+
+            function handleTick() {
+                if (scene === 0) {
+                    stage.update();
+                }
+
+                if (scene === 1) {
+
+                    if (player_flag === 0) {
+
+                        player = new createjs.Container();
+
+                        player_appearence = new createjs.Bitmap("picture/player.png");
+
+                        player_appearence.crossOrigin = "Anonymous";
+                        player_appearence.scaleX = 0.25;
+                        player_appearence.scaleY = 0.25;
+
+                        player.addChild(player_appearence);
+
+                        player_judge = new createjs.Shape();
+                        player_judge.graphics.beginFill("red").drawRect(0, 0, 150, 150);
+
+                        player_judge.visible = false;
+
+                        player.addChild(player_judge);
+
+                        player_shape = player_judge;
+
+
+                        player.x = stage.canvas.width / 2;
+                        player.y = stage.canvas.height / 2;
+
+                        //player.regX = player.getBounds().width / 2;
+                        //player.regY = player.getBounds().height / 2;
+
+                        player_flag = 1;
+
+                    }
+                    stage.addChild(player);
+
+
+                    handleRetry();
+                    if (isA === true) {
+                        player.x -= 5;
+                    }
+                    if (isW === true) {
+                        player.y -= 5;
+                    }
+                    if (isD === true) {
+                        player.x += 5;
+                    }
+                    if (isS === true) {
+                        player.y += 5;
+                    }
+                    if (player.x <= 0) {
+                        player.x = 1;
+                    }
+                    if (player.x >= 1890) {
+                        player.x = 1889;
+                    }
+                    if (player.y <= 0) {
+                        player.y = 1;
+                    }
+                    if (player.y >= 895) {
+                        player.y = 894;
+                    }
+                    if (isSpace === true && count % 20 === 0) {
+                        let bullet = new createjs.Shape();
+                        createjs.Sound.play("shot");
+                        bullet.graphics.beginFill("red").drawCircle(0, 0, 10);
+                        bullet.x = player.x;
+                        bullet.y = player.y + 70;
+
+
+
+                        bulletList.push(bullet);
+                        stage.addChild(bullet);
+                    }
+                    //敵について
+                    if (count % 4 === 0) {
+                        let enemy;
+
+                        select_random_enemy(enemy);
+
+                    }
+                    count++;
+
+                    if (count % 500 === 0) {
+                        let enemy = new createjs.Shape();
+                        enemy.graphics.beginFill("#C0C0C0").drawCircle(0, 0, 30);
+                        enemy.x = stage.canvas.width;
+                        enemy.y = Math.random() * stage.canvas.height;
+                        chase_enemy_List.push(enemy);
+                        stage.addChild(enemy);
+                    }
+
+                    move_chase_enemy();
+
+                    move_enemy();
+
+                    moveBullets();
+
+                    for (let i = 0; i < bulletList.length; i++) {
+                        bulletList[i].x += 10;
+                    }
+
+                    for (let i = 0; i < enemyList.length; i++) {
+                        let enemyLocal = enemyList[i].localToLocal(0, 0, player_shape);
+                        if (player.hitTest(enemyLocal.x, enemyLocal.y)) {
+
+                            gameOver(score, stage);
+                        }
+                    }
+
+                    for (let i = 0; i < diagnal_enemy_List.length; i++) {
+                        let diagnal_enemy_Local = diagnal_enemy_List[i].localToLocal(0, 0, player_shape);
+                        if (player_shape.hitTest(diagnal_enemy_Local.x, diagnal_enemy_Local.y)) {
+
+                            gameOver(score, stage);
+                        }
+
+
+                    }
+                    for (let i = 0; i < chase_enemy_List.length; i++) {
+                        let chase_enemy_Local = chase_enemy_List[i].localToLocal(0, 0, player_shape);
+                        if (player_shape.hitTest(chase_enemy_Local.x, chase_enemy_Local.y)) {
+                            gameOver(score, stage);
+                        }
+                    }
+
+
+                    for (let i = 0; i < bulletList.length; i++) {
+                        for (let j = 0; j < enemyList.length; j++) {
+                            if (stage.contains(bulletList[i]) === false) break;
+                            let localPoint = bulletList[i].localToLocal(0, 0, enemyList[j]);
+
+                            if (enemyList[j].hitTest(localPoint.x, localPoint.y)) {
+                                createjs.Sound.play("damege");
+                                stage.removeChild(bulletList[i]);
+                                bulletList.splice(i, 1);
+
+                                removeEnemy(j);
+
+
+
+                                score += 100;
+
+                                scoreText.text = "Score:" + score;
+                            }
+                        }
+                    }
+
+
+                    let isShooting = false;
+
+                    function handleInput(event) {
+                        if (event.type === 'keydown') {
+                            if (event.key === 'Space') {
+                                isShooting = true;
+                            }
+                        } else if (event.type === 'keyup') {
+                            if (event.key === 'Space') {
+                                isShooting = false;
+                            }
+                        }
+                    }
+
+                    /*   function gameloop() {
+                             if (isShooting) {
+                                 shootBullet();
+                             }
+                             requestAnimationFrame(gameloop());
+                         }*/
+                    document.addEventListener('keydown', handleInput);
+                    document.addEventListener('keyup', handleInput);
+                    //gameloop();
+                    //敵をランダムに出現させる函数
+                    //修正点
+
+
+                    function select_random_enemy(enemy) {
+                        random = parseInt(6 * Math.random());
+
+                        if (random === ENEMY_ID1) {
+                            let enemy = new createjs.Container();
+                            let enemy_appearence = new createjs.Bitmap("picture/right_to_left_enemy1.png");
+
+                            enemy_appearence.image.onload = function () {
+                                enemy_appearence.crossOrigin = "Anonymous";
+                                enemy_appearence.scaleX = 0.15;
+                                enemy_appearence.scaleY = 0.15;
+                                enemy_appearence.regX = enemy_appearence.getBounds().width / 2;
+                                enemy_appearence.regY = enemy_appearence.getBounds().height / 2 + 10;
+
+                                let enemyJudge = new createjs.Shape();
+                                enemyJudge.graphics.beginFill("green").drawRect(0, 0, 150, 150);
+                                enemyJudge.visible = true;
+                                enemy_appearence.image.src = "picture/right_to_left_enemy1.png";
+
+
+                                //enemy_appearence.x = -500;
+                                //enemy_appearence.y = -700;  
+
+                                enemy.addChild(enemy_appearence);
+                            };
+
+                            let enemy_judge = new createjs.Shape();
+                            enemy_judge.graphics.beginFill("green").drawRect(0, 0, 120, 120);
+                            enemy_judge.visible = false;
+                            enemy.addChild(enemy_judge);
+                            enemy.x = stage.canvas.width;
+                            enemy.y = stage.canvas.height * Math.random();
+                            stage.addChild(enemy);
+                            enemyList.push(enemy);
+                            enemyShape.push(enemy_judge);
+                            enemy_id_List.push(ENEMY_ID1);
+                        }
+
+                        else if (random === ENEMY_ID2) {
+                            let enemy = new createjs.Container();
+                            let enemy_appearence = new createjs.Bitmap("picture/right_to_left_enemy2.png");
+                            enemy_appearence.image.onload = function () {
+                                enemy_appearence.crossOrigin = "Anonymous";
+                                enemy_appearence.scaleX = 0.5;
+                                enemy_appearence.scaleY = 0.5;
+                                enemy_appearence.regX = enemy_appearence.getBounds().width / 2;
+                                enemy_appearence.regY = enemy_appearence.getBounds().height / 2 + 10;
+
+                                let enemyJudge = new createjs.Shape();
+                                enemyJudge.graphics.beginFill("green").drawRect(0, 0, 150, 150);
+                                enemyJudge.visible = true;
+                                enemy_appearence.image.src = "picture/right_to_left_enemy2.png";
+
+
+                                //enemy_appearence.x = -500;
+                                //enemy_appearence.y = -700;  
+
+                                enemy.addChild(enemy_appearence);
+                            };
+                            let enemy_judge = new createjs.Shape();
+                            enemy_judge.graphics.beginFill("green").drawRect(0, 0, 100, 100);
+                            enemy_judge.visible = false;
+                            enemy.addChild(enemy_judge);
+                            enemy.x = stage.canvas.width;
+                            enemy.y = stage.canvas.height * Math.random();
+                            stage.addChild(enemy);
+                            enemyList.push(enemy);
+                            enemyShape.push(enemy_judge);
+                            enemy_id_List.push(ENEMY_ID2);
+                        }
+
+                        if (3 <= random && random <= 5) {
+                            let enemy = new createjs.Container();
+                            let enemy_appearence = new createjs.Bitmap("picture/diagonal_enemy.gif");
+
+                            // 画像の読み込み開始
+                            enemy_appearence.image.src = "picture/diagonal_enemy.gif";
+
+                            // 画像の読み込み完了時の処理
+                            enemy_appearence.image.onload = function () {
+                                enemy_appearence.crossOrigin = "Anonymous";
+                                enemy_appearence.scaleX = 0.35;
+                                enemy_appearence.scaleY = 0.35;
+                                enemy_appearence.regX = enemy_appearence.getBounds().width / 2 + 30;
+                                enemy_appearence.regY = enemy_appearence.getBounds().height / 2 - 30;
+                                enemy.addChild(enemy_appearence);
+                                let enemyJudge = new createjs.Shape();
+                                enemyJudge.graphics.beginFill("green").drawRect(0, 0, 150, 150);
+                                enemyJudge.visible = false;
+                                enemy.addChild(enemyJudge);
+                                Spown_diagnal(enemy);
+
+                                stage.addChild(enemy);
+                                diagnal_enemy_List.push(enemy);
+                                diagnal_enemy_Shape.push(enemyJudge);
+                            };
+
+
+
+                        }
+                    }
+
+                    //敵を動かす関数 
+                    //修正点
+                    function move_enemy() {
+                        for (let i = 0; i < enemyList.length; i++) {
+
+                            if (enemy_id_List[i] === ENEMY_ID1) {
+                                enemyList[i].x -= 15;
+                            }
+                            else if (enemy_id_List[i] === ENEMY_ID2) {
+                                enemyList[i].x -= 10;
+                            }
+
+                            if (enemy_id_List[i].x < 0) {
+                                removeEnemy(i);
+                            }
+
+                        }
+
+                        for (let j = 0; j < diagnal_enemy_List.length; j++) {
+                            move_blue_enemy(j);
+                            if (diagnal_enemy_List[j].x < -500 || diagnal_enemy_List[j].x > stage.canvas.width + 500
+                                || diagnal_enemy_List[j].y < -500 || diagnal_enemy_List[j].y > stage.canvas.height + 500) {
+                                remove_diagnal_enemy(j);
+                            }
+                        }
+                    }
+                    //画面の4端に、それぞれ青色の敵を沸かせたい 
+                    //関数を触ると危険！！注意!!!
+                    function Spown_diagnal(enemy) {
+                        let set_random_spown = parseInt(4 * Math.random());
+
+                        if (set_random_spown === LEFTUP) {
+                            enemy.x = Math.random() * (stage.canvas.width / 2) - stage.canvas.width / 2;
+                            enemy.y = Math.random() * (stage.canvas.height / 2) - stage.canvas.height / 2;
+
+                            // enemy_appearence.regX = enemy_appearence.getBounds().width / 2;
+                            //enemy_appearence.regY = enemy_appearence.getBounds().height / 2;
+
+
+                            blue_enemy_spown_List.push(LEFTUP);
+
+                        }
+
+                        else if (set_random_spown === RIGHTUP) {
+                            enemy.x = stage.canvas.width / 2 + Math.random() * (stage.canvas.width / 2) + stage.canvas.width / 2;
+                            enemy.y = Math.random() * (stage.canvas.height / 2) - stage.canvas.height / 2;
+
+                            // enemy_appearence.regX = enemy_appearence.getBounds().width / 2;
+                            // enemy_appearence.regY = enemy_appearence.getBounds().height / 2;
+
+                            blue_enemy_spown_List.push(RIGHTUP);
+                        }
+
+                        else if (set_random_spown === LEFTDOWN) {
+                            enemy.x = Math.random() * (stage.canvas.width / 2) - stage.canvas.width / 2;
+                            enemy.y = stage.canvas.height / 2 + Math.random() * (stage.canvas.height / 2) + stage.canvas.height / 2;
+
+                            //enemy_appearence.regX = enemy_appearence.getBounds().width / 2;
+                            //enemy_appearence.regY = enemy_appearence.getBounds().height / 2;
+
+
+                            blue_enemy_spown_List.push(LEFTDOWN)
+                        }
+
+                        else if (set_random_spown === RIGHTDOWN) {
+                            enemy.x = stage.canvas.width / 2 + Math.random() * (stage.canvas.width / 2) + stage.canvas.width / 2;
+                            enemy.y = stage.canvas.height / 2 + Math.random() * (stage.canvas.height / 2) + stage.canvas.height / 2;
+
+                            //enemy_appearence.regX = enemy_appearence.getBounds().width / 2;
+                            //enemy_appearence.regY = enemy_appearence.getBounds().height / 2;
+
+                            blue_enemy_spown_List.push(RIGHTDOWN);
+                        }
+
+                    }
+
+                    function move_blue_enemy(i) {
+                        if (blue_enemy_spown_List[i] === LEFTUP) {
+                            diagnal_enemy_List[i].x += 10;
+                            diagnal_enemy_List[i].y += 10;
+                        } else if (blue_enemy_spown_List[i] === RIGHTUP) {
+                            diagnal_enemy_List[i].x -= 10;
+                            diagnal_enemy_List[i].y += 10;
+                        } else if (blue_enemy_spown_List[i] === LEFTDOWN) {
+                            diagnal_enemy_List[i].x += 10;
+                            diagnal_enemy_List[i].y -= 10;
+                        } else if (blue_enemy_spown_List[i] === RIGHTDOWN) {
+                            diagnal_enemy_List[i].x -= 10;
+                            diagnal_enemy_List[i].y -= 10;
+                        }
+                    }
+
+                    function moveBullets() {
+                        for (let i = bulletList.length - 1; i >= 0; i--) {
+                            bulletList[i].x += 10;
+                            if (bulletList[i].x > stage.canvas.width) {
+                                stage.removeChild(bulletList[i]);
+                                bulletList.splice(i, 1);
+
+                            }
+                        }
+                    }
+
+                    function removeEnemy(i) {
+
+                        stage.removeChild(enemyList[i]);
+                        enemyList.splice(i, 1);
+                        enemy_id_List.splice(i, 1);
+
+
+
+                    }
+
+                    function remove_diagnal_enemy(i) {
+                        stage.removeChild(diagnal_enemy_List[i]);
+                        diagnal_enemy_List.splice(i, 1);
+                        blue_enemy_spown_List.splice(i, 1);
+                    }
+
+                    function move_chase_enemy() {
+                        for (let i = 0; i < chase_enemy_List.length; i++) {
+                            let deltaX = player.x - chase_enemy_List[i].x;
+                            let deltaY = player.y - chase_enemy_List[i].y;
+                            let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+
+                            let speed = 2.5;
+
+                            if (distance > 0) {
+                                chase_enemy_List[i].x += (deltaX / distance) * speed;
+                                chase_enemy_List[i].y += (deltaY / distance) * speed;
+                            }
+                        }
+
+                    }
+
+
+
+
+                    stage.update()
+                }
+            }
+
+        }
+
+
+        function gameOver(score, stage) {
+            overTime = new Date();
+
+            let time;
+
+            if(startTime && overTime){
+                time = (overTime - startTime) / 1000;
+            }
+
+            let bg3 = new createjs.Shape();
+            bg3.graphics.beginFill("red").drawRect(0, 0, stage.canvas.width, stage.canvas.height);
+            stage.addChild(bg3);
+
+            createjs.Sound.stop();
+            createjs.Sound.play("damaged");
+            createjs.Sound.play("gameover");
+
+            let gameover_text = new createjs.Text("Game Over!!\n----------------\n", "200px sans-serif", "white");
+            gameover_text.x = stage.canvas.width / 2 - 600;
+            gameover_text.y = stage.canvas.height / 2 - 300;
+            let announce_text = new createjs.Text("Type F5 to continue!! Your score: " + score + " TIME SCORE: "+ time, "50px sans-serif", "white");
+            announce_text.x = stage.canvas.width / 2 - 700;
+            announce_text.y = stage.canvas.height / 2 + 100;
+
+            stage.addChild(gameover_text);
+            stage.addChild(announce_text);
+
+
+
+            createjs.Ticker.removeAllEventListeners();
+            stage.removeAllEventListeners();
+        }
+
+
+
+
+
+
+
+    </script>
+</head>
+
+<body>
+    <canvas id="myCanvas" width="1900" height="900"></canvas>
+    <p1>
+        <br>
+        本ゲームは、<a href="http://www.aizunpo.or.jp/cssc/index.html">コンピュータサイエンスサマーキャンプ</a>2023年 JavaScriptゲームプログラミングコースのプロジェクトの一環として、
+            <br>
+            インストラクターとして、高校生と一緒に作成したゲームです。一部の素材は著作権上入れ替えております。
+            <br>
+            画面をクリックするとゲームが開始します。（リロードした後すぐに始めると、BGMが流れない場合があります)
+            <br>
+            敵に当たらないように、WASDキーで移動し、SPACEキーで弾を撃ち敵を倒してください。死神は弾を避けるため、当たらないように注意してください。
+            <br>
+            使用素材:
+            <br>
+            画像:
+            <br>
+            DOT ILLUST 様, &nbsp;
+            Chat GPT-4 Omni生成画像: ゲーム画面の背景
+            <br>
+            BGM & SE:
+            <br>
+            DOVA-SYNDROME 様, &nbsp;
+            効果音ラボ 様
+            <br>
+</body>
+
+</html>
