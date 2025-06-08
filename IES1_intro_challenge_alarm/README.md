@@ -43,6 +43,10 @@ Pythonのパッケージ: pygameと、SQLiteを使いアラームを流します
 ## システムアーキテクチャは以下のようになっています。
 
 ![image](https://github.com/user-attachments/assets/73dca288-9f87-4a36-a412-b8f170d381d1)
+
 ブザー素子: 14番ピン, 12番ピンに接続
 LED: 20番ピン, 18番ピンに接続
 クイズを止めるためのボタン: 1番ピン, 22番ピンに接続
+I2C LCD(液晶)モジュール: GND:6番ピン, VDD:2番ピン, SDA:3番ピン, SCL:5番ピン
+
+
