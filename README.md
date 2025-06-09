@@ -1,12 +1,12 @@
 # はじめに
-本ポートフォリオをご覧いただき、誠にありがとうございます。これまでに作成した主要な成果物をまとめています。さらに詳細な技術仕様に関しましては、各フォルダ内のREADNE.md, または、pdfファイルから見る事ができます。/Thank you very much for visiting my portfolio. This portfolio highlights the key project that I have developed. For more detailed technical specification please refer to the READ files or documentation files within each foloder.
+本ポートフォリオをご覧いただき、誠にありがとうございます。これまでに作成した主要な成果物をまとめています。さらに詳細な技術的な仕様に関しては、各フォルダ内のREADNE.md, または、pdfファイルから見る事ができます。/Thank you very much for visiting my portfolio. This portfolio highlights the key project that I have developed. For more detailed technical specification please refer to the READ files or documentation files within each foloder.
 
 ## 1.エッジAI搭載　自動走行ラズベリーパイカー / Raspberry Pi autonomous driving car 
 ```
 フォルダ(Foloder): autonomous_driving
 ```
 ##  概要(Overview)
-大学の課外プロジェクトに参加し、量子化畳み込みニューラルネットワークモデルをラズベリーパイ上に搭載し、決められたコース上を自動走行させました。具体的には、ステアリング操作のデータセットに対し、量子化によるモデル圧縮と、不均衡データ誤分類コストの最適化を同時に行う手法を考案・実装しました。この手法により、エッジデバイス上での軽量な動作と、より精度の高い安定した自動走行を両立させる事に成功しました。/ This is an autonomous driving robot powered by an Edge AI model, which I developed as part of the university's extracurricular project. The model learns both aspects of quantization error and the cost of misclassification of imbalanced data. By applying this method, accuracy improved, leading to safer driving.
+大学の課外プロジェクトに参加し、量子化畳み込みニューラルネットワークモデルをラズベリーパイ上に搭載し、決められたコース上を自動走行させました。具体的には、ステアリング操作のデータセットに対し、量子化によるモデル圧縮と、アンバランスなデータ誤分類コストの最適化を同時に行う手法を考案・実装しました。この手法によって、エッジデバイス上での軽量な動作と、より精度の高い安定した自動走行を両立させる事に成功しました。/ This is an autonomous driving robot powered by an Edge AI model, which I developed as part of the university's extracurricular project. The model learns both aspects of quantization error and the cost of misclassification of imbalanced data. By applying this method, accuracy improved, leading to safer driving.
 
 ## 使用技術(Technology and used framework)
 使用言語(Programming Language)Python
