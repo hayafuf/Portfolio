@@ -40,5 +40,31 @@ Test データセットのクラスごとのデータ数:
 クラス "straight" のデータ数: 245サンプル
 ```
 コース班時計周りにデータを取ったため、右のサンプルが不足しています。
-これに対して私は、量子化認識学習モデルと、量子化と不均一ラベルに対する誤分類コストを同時に学ばせる、つまり右であるにもかかわらずまっすぐという
-場所にコストを置き学習させて比較しました。各モデルは100エポック、オプティマイザーはSGD, lr=0.001, momentum = 0.9, nestrov = True, weigth_decay = 5e-4で学習させます。
+これに対して私は、量子化認識学習モデルと、量子化と不均一ラベルに対する誤分類コストを同時に学ばせる、つまり右であるにもかかわらずまっすぐと誤分類する
+場面にコストを置き学習させて比較しました。各モデルは100エポック、オプティマイザーはSGD, lr=0.001, momentum = 0.9, nestrov = True, weigth_decay = 5e-4で学習させます。
+より、主張を強固なものとするためモデルは、3つ作りました。
+各モデルは、以下のような構造を使います。
+
+![image](https://github.com/user-attachments/assets/41b514cc-c60f-4d1c-a7e0-a1cea2cd2c92)
+
+
+![image](https://github.com/user-attachments/assets/c6a0d9e7-056e-4917-b811-36f2aae20fd0)
+
+
+
+以下が結果です。
+
+
+![image](https://github.com/user-attachments/assets/75dd3d7d-9d65-48c4-900f-cfcbcacc3aa0)
+
+![image](https://github.com/user-attachments/assets/0e087dc6-4f3e-475c-bc67-6cbe89cadf16)
+
+![image](https://github.com/user-attachments/assets/bf2aa78f-2f98-42d1-bb1b-f63adbf9bdcc)
+
+私の予想とは反して、モデル1とモデル2に関しては、右ラベルに対して通常の量子化認識学習モデルよりもマジョリティラベルに分類されてしまうといった結果が得られました。
+
+しかしながら、全体的な精度は従来の量子化認識学習モデルよりも向上したといった結果が得られました。
+
+これらの仮説として、以下の2点が考えられます。
+まず一つ目に、今回使用したデータセットにそしてtestデータのrightデータ数があまりにも少なくマジョリティクラスに分類されてしまった。
+二つ目に、
