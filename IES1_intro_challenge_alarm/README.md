@@ -53,6 +53,7 @@ Hello from the pygame community. https://www.pygame.org/contribute.html
 
 ## 追加する機能(ハード側)
 ![image](https://github.com/user-attachments/assets/35055647-f748-4d6f-b08b-5aa642c03e61)
+
 Pythonのパッケージを使いアラームを設定し、指定時間になったら、ブザーと目覚まし音源を鳴らします。
 ブザーとは別にスピーカーも接続し、ボタンを押すまでアラーム音を鳴らし続けます。
 アラームが設定された際には、GPIOでつないだLEDでアラームが設定状況を通知し、現在時刻を表示する仕組みも組み込みます。
