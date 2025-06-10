@@ -19,7 +19,7 @@
 
 ## デモ動画
 
-https://github.com/user-attachments/assets/d50bd8a1-6090-4ec6-b733-2d74e22c60cd
+[https://github.com/user-attachments/assets/d50bd8a1-6090-4ec6-b733-2d74e22c60cd](https://github.com/user-attachments/assets/5e9aa4cf-3ac1-4141-ab12-2e034185898d)
 
 
 ##  2.ラズベリーパイ イントロチャレンジアラーム / Raspberry pi Intro-challenge alarm 
